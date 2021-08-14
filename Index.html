@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <title>Dog portal</title>
+    <meta charset="utf-8" />
+  </head>
+  <body>
+    <div class="container-fluid px-0 mx-0">
+      <!--Navbar start-->
+      <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">Hillheads Dog Club</a>
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a
+                  class="nav-link active"
+                  aria-current="page"
+                  onclick="redirecthome()"
+                >
+                  Home
+                </a>
+              </li>
+            </ul>
+            <!--Add buttons to initiate auth sequence and sign out-->
+            <button
+              id="authorize_button"
+              style="display: none"
+              class="btn btn-warning"
+            >
+              Authorize
+            </button>
+            <button
+              id="signout_button"
+              style="display: none"
+              class="btn btn-danger"
+            >
+              Sign Out
+            </button>
+          </div>
+        </div>
+      </nav>
+      <h3
+        id="final-table-header"
+        class="text-center"
+        style="display: none"
+      ></h3>
+      <button
+        id="add-customer"
+        class="btn btn-lg btn-success text-center mx-auto"
+        style="display: none"
+        onclick="showForm()"
+      >
+        Add Customer
+      </button>
+
+      <div class="container-fluid" id="customerform" style="display: none">
+        <div class="row">
+          <div class="col col-lg-6 col-md-6 mx-auto">
+            <form onsubmit="cust(event)">
+              <div class="mb-1">
+                <label for="customername" class="form-label">Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="customername"
+                  required
+                />
+              </div>
+              <div class="mb-1">
+                <label for="customerpostcode" class="form-label"
+                  >Postcode</label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  id="customerpostcode"
+                  required
+                />
+              </div>
+              <div class="mb-1">
+                <label for="customeremail" class="form-label">Email</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  id="customeremail"
+                  required
+                />
+              </div>
+              <div class="mb-1">
+                <label for="customerphone" class="form-label">Phone</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="customerphone"
+                  required
+                />
+              </div>
+              <div class="mb-1">
+                <label for="customerdog" class="form-label">Dog Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="customerdog"
+                  required
+                />
+              </div>
+              <div class="mb-1">
+                <label for="customerbreed" class="form-label">Breed</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="customerbreed"
+                  required
+                />
+              </div>
+              <div class="mb-1">
+                <label for="customertc" class="form-label">T&C</label>
+                <select class="form-select" aria-label="T&C" id="customertc">
+                  <option value="No">No</option>
+                  <option value="Yes">Yes</option>
+                </select>
+              </div>
+              <div class="mb-1">
+                <label for="customerpaid" class="form-label">Paid</label>
+                <select class="form-select" aria-label="T&C" id="customerpaid">
+                  <option value="No">No</option>
+                  <option value="Yes">Yes</option>
+                </select>
+              </div>
+              <div class="mt-1 mx-auto text-center">
+                <button
+                  type="button"
+                  id="goback"
+                  class="btn btn-warning"
+                  onclick="backGo(event)"
+                >
+                  Back
+                </button>
+                <button type="submit" class="btn btn-primary">Add</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <!--Day row-->
+      <div class="row my-4 px-5" id="day" style="display: none">
+        <div class="col col-lg-2 text-center">
+          <label class="mt-1">Select Day : </label>
+        </div>
+        <div class="col col-lg-10">
+          <select
+            class="form-select"
+            aria-label="Select Day"
+            id="day-select"
+            onchange="showTiming(this.value)"
+          >
+            <option value="" selected disabled>Drop Down</option>
+            <option value="Sunday">Sunday</option>
+            <option value="Tuesday">Tuesday</option>
+            <option value="Wednesday">Wednesday</option>
+
+          </select>
+        </div>
+      </div>
+      <!--Timing row-->
+      <div class="row my-4 px-5" id="time" style="display: none">
+        <div class="col col-lg-2 text-center">
+          <label class="mt-1">Select Time : </label>
+        </div>
+        <div class="col col-lg-10">
+          <select
+            class="form-select"
+            aria-label="Select Day"
+            id="time-select"
+            onchange="showDates(this.value)"
+          ></select>
+        </div>
+      </div>
+
+      <!--Dates row-->
+      <div class="row my-4 px-5" id="week" style="display: none">
+        <div class="col col-lg-2 text-center">
+          <label class="mt-1">Select Week : </label>
+        </div>
+        <div class="col col-lg-10">
+          <select
+            class="form-select"
+            aria-label="Select Day"
+            id="week-select"
+            onchange="getDogData(this.value, this.options[this.selectedIndex].text)"
+          ></select>
+        </div>
+      </div>
+
+      <div
+        class="table-responsive mx-3 my-3"
+        id="table-div"
+        style="display: none"
+      >
+        <table class="table text-center" id="dogtable">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Dog Name</th>
+              <th scope="col">Breed</th>
+              <th scope="col">Name</th>
+              <th scope="col">Phone</th>
+              <th scope="col">Attendance</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody id="table-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Option 2: Separate Popper and Bootstrap JS -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"
+      integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+      integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+      crossorigin="anonymous"
+    ></script>
+
+    <script type="text/javascript">
+      // Client ID and API key from the Developer Console
+      var CLIENT_ID = "96422988205-aovjjq9c5jg4ioqie62m3cl1lnr4apth.apps.googleusercontent.com";
+      var API_KEY = "AIzaSyDktTQj41SuxEn1mxk1-i2Hw2glSX6gF3s";
+
+      var SPREADSHEET_ID = "1ougPLGo4WWpjuBOuPtfZ-b_rlmezLUrnGGXud59mIPo";
+
+
+      // Array of API discovery doc URLs for APIs used by the quickstart
+      var DISCOVERY_DOCS = [
+        "https://sheets.googleapis.com/$discovery/rest?version=v4",
+      ];
+
+      // Authorization scopes required by the API; multiple scopes can be
+      // included, separated by spaces.
+      var SCOPES = "https://www.googleapis.com/auth/spreadsheets";
+
+      var authorizeButton = document.getElementById("authorize_button");
+      var signoutButton = document.getElementById("signout_button");
+      var dayRow = document.getElementById("day");
+      var timeRow = document.getElementById("time");
+      var weekRow = document.getElementById("week");
+      var timeSelect = document.getElementById("time-select");
+      var weekSelect = document.getElementById("week-select");
+      var finalTableHeader = document.getElementById("final-table-header");
+      var tablediv = document.getElementById("table-div");
+      var addcustomer = document.getElementById("add-customer");
+      var goback = document.getElementById("goback");
+      var tablebody = document.getElementById("table-body");
+      var customerformdiv = document.getElementById("customerform");
+      var GLOBAL_DATA = [];
+
+      var DaySelected = "";
+      var TimeSelected = "";
+      var DateSelected = "";
+      var SheetSelected = "";
+      var RowNumSelected = "";
+
+      /**
+       *  On load, called to load the auth2 library and API client library.
+       */
+      function handleClientLoad() {
+        gapi.load("client:auth2", initClient);
+      }
+
+      function showTiming(val) {
+        DaySelected = val;
+        var length = timeSelect.options.length;
+        for (i = length - 1; i >= 0; i--) {
+          timeSelect.options[i] = null;
+        }
+        timeRow.style.display = "flex";
+        weekRow.style.display = "none";
+        let defaultopt = document.createElement("option");
+        defaultopt.setAttribute("value", "");
+        defaultopt.disabled = true;
+        defaultopt.selected = true;
+        defaultopt.appendChild(document.createTextNode("Select Time"));
+        timeSelect.appendChild(defaultopt);
+        if (val === "") {
+        } else if (val == "Sunday") {
+          let opt = document.createElement("option");
+          opt.setAttribute("value", "Sunday 9.30AM");
+          opt.appendChild(document.createTextNode("9:30 AM"));
+          timeSelect.appendChild(opt);
+
+          opt = document.createElement("option");
+          opt.setAttribute("value", "Sunday 10.30AM");
+          opt.appendChild(document.createTextNode("10:30 AM"));
+          timeSelect.appendChild(opt);
+        } else if (val == "Tuesday") {
+          let opt = document.createElement("option");
+          opt.setAttribute("value", "Tuesday 6.30PM");
+          opt.appendChild(document.createTextNode("6:30 PM"));
+          timeSelect.appendChild(opt);
+        }
+      }
+
+      function showDates(val) {
+        SheetSelected = val;
+        if (val == "Sunday 9.30AM") {
+          TimeSelected = "9:30 AM";
+        } else if (val == "Sunday 10.30AM") {
+          TimeSelected = "10:30 AM";
+        } else if (val == "Tuesday 6.30PM") {
+          TimeSelected = "6:30 PM";
+        }
+        var length = weekSelect.options.length;
+        for (i = length - 1; i >= 0; i--) {
+          weekSelect.options[i] = null;
+        }
+        gapi.client.sheets.spreadsheets.values
+          .get({
+            spreadsheetId: SPREADSHEET_ID,
+            range: val + "!A1:Z1",
+          })
+          .then(
+            function (response) {
+              var range = response.result;
+              if (range.values[0].length > 10) {
+                let tempArray = range.values[0].slice(10);
+                weekRow.style.display = "flex";
+                let defaultopt = document.createElement("option");
+                //setting the default option
+                defaultopt.setAttribute("value", "");
+                defaultopt.disabled = true;
+                defaultopt.selected = true;
+                defaultopt.appendChild(document.createTextNode("Select Week"));
+                weekSelect.appendChild(defaultopt);
+
+                for (let v = 0; v < tempArray.length; v++) {
+                  var opti = document.createElement("option");
+                  opti.setAttribute("value", 10 + v);
+                  opti.appendChild(document.createTextNode(tempArray[v]));
+                  weekSelect.appendChild(opti);
+                }
+              } else {
+                alert("No Dates Found");
+              }
+            },
+            function (response) {
+              alert("Error: " + response.result.error.message);
+            }
+          );
+      }
+
+      function rerender(val, txt) {
+        tablebody.innerHTML = "";
+        getDogData(val, txt);
+      }
+
+      function getDogData(val, txt) {
+        DateSelected = txt;
+        RowNumSelected = val;
+        dayRow.style.display = "none";
+        timeRow.style.display = "none";
+        weekRow.style.display = "none";
+        customerformdiv.style.display = "none";
+        finalTableHeader.style.display = "block";
+        finalTableHeader.innerHTML =
+          DaySelected + " (" + TimeSelected + ") - " + DateSelected;
+        gapi.client.sheets.spreadsheets.values
+          .get({
+            spreadsheetId: SPREADSHEET_ID,
+            range: SheetSelected,
+          })
+          .then(
+            function (response) {
+              var res = response.result.values;
+              if (res.length > 0) {
+                displayDogTable(res, val);
+              } else {
+                alert("No Data Found");
+              }
+            },
+            function (response) {
+              alert("Error: " + response.result.error.message);
+            }
+          );
+      }
+
+      function showForm() {
+        tablediv.style.display = "none";
+        addcustomer.style.display = "none";
+        customerformdiv.style.display = "block";
+        goback.style.display = "";
+      }
+      function displayDogTable(data, val) {
+        GLOBAL_DATA = data;
+        tablediv.style.display = "flex";
+        addcustomer.style.display = "flex";
+        for (let c = 1; c < data.length; c++) {
+          var tr = document.createElement("tr");
+          var td = document.createElement("td");
+          td.appendChild(document.createTextNode(c));
+          tr.appendChild(td);
+          td = document.createElement("td");
+          td.appendChild(document.createTextNode(data[c][5]));
+          tr.appendChild(td);
+          td = document.createElement("td");
+          td.appendChild(document.createTextNode(data[c][6]));
+          tr.appendChild(td);
+          td = document.createElement("td");
+          td.appendChild(document.createTextNode(data[c][1]));
+          tr.appendChild(td);
+          td = document.createElement("td");
+          td.appendChild(document.createTextNode(data[c][4]));
+          tr.appendChild(td);
+          td = document.createElement("td");
+          td.appendChild(
+            document.createTextNode(
+              data[c][val] == undefined ? "-" : data[c][val]
+            )
+          );
+          tr.appendChild(td);
+          td = document.createElement("td");
+          yesbutton = document.createElement("button");
+          yesbutton.setAttribute("class", "btn btn-success");
+          yesbutton.setAttribute(
+            "onclick",
+            "yesclick(" + c.toString() + "," + val.toString() + ")"
+          );
+          yesbutton.appendChild(document.createTextNode("Yes"));
+          nobutton = document.createElement("button");
+          nobutton.setAttribute("class", "btn btn-danger");
+          nobutton.setAttribute(
+            "onclick",
+            "noclick(" + c.toString() + "," + val.toString() + ")"
+          );
+          nobutton.appendChild(document.createTextNode("No"));
+          td.appendChild(yesbutton);
+          td.appendChild(nobutton);
+          tr.appendChild(td);
+          tablebody.appendChild(tr);
+        }
+      }
+
+      function noclick(rw, col) {
+        let tempVal = GLOBAL_DATA;
+        tempVal[rw][col] = "No";
+        var params = {
+          // The ID of the spreadsheet to update.
+          spreadsheetId: SPREADSHEET_ID,
+
+          // The A1 notation of the values to update.
+          range: SheetSelected,
+
+          // How the input data should be interpreted.
+          valueInputOption: "RAW", // TODO: Update placeholder value.
+        };
+
+        var valueRangeBody = {
+          range: SheetSelected,
+          majorDimension: "ROWS",
+          values: tempVal,
+        };
+        var request = gapi.client.sheets.spreadsheets.values.update(
+          params,
+          valueRangeBody
+        );
+        request.then(
+          function (response) {
+            rerender(col, DateSelected);
+          },
+          function (reason) {
+            alert("error: " + reason.result.error.message);
+          }
+        );
+      }
+
+      function yesclick(rw, col) {
+        let tempVal = GLOBAL_DATA;
+        tempVal[rw][col] = "Yes";
+        var params = {
+          // The ID of the spreadsheet to update.
+          spreadsheetId: SPREADSHEET_ID,
+
+          // The A1 notation of the values to update.
+          range: SheetSelected,
+
+          // How the input data should be interpreted.
+          valueInputOption: "RAW", // TODO: Update placeholder value.
+        };
+
+        var valueRangeBody = {
+          range: SheetSelected,
+          majorDimension: "ROWS",
+          values: tempVal,
+        };
+        var request = gapi.client.sheets.spreadsheets.values.update(
+          params,
+          valueRangeBody
+        );
+        request.then(
+          function (response) {
+            rerender(col, DateSelected);
+          },
+          function (reason) {
+            alert("error: " + reason.result.error.message);
+          }
+        );
+      }
+
+      function backGo(event) {
+        event.preventDefault();
+        changeGlobalData();
+        tablebody.innerHTML = "";
+        getDogData(RowNumSelected, DateSelected);
+      }
+
+      function addNewCustomer(tempVal) {
+        var params = {
+          // The ID of the spreadsheet to update.
+          spreadsheetId: SPREADSHEET_ID,
+
+          // The A1 notation of the values to update.
+          range: SheetSelected,
+
+          // How the input data should be interpreted.
+          valueInputOption: "RAW", // TODO: Update placeholder value.
+        };
+
+        var valueRangeBody = {
+          range: SheetSelected,
+          majorDimension: "ROWS",
+          values: tempVal,
+        };
+        var request = gapi.client.sheets.spreadsheets.values.update(
+          params,
+          valueRangeBody
+        );
+        request.then(
+          function (response) {
+            changeGlobalData();
+            tablebody.innerHTML = "";
+            getDogData(RowNumSelected, DateSelected);
+          },
+          function (reason) {
+            alert("error: " + reason.result.error.message);
+          }
+        );
+      }
+
+      function changeGlobalData() {
+        gapi.client.sheets.spreadsheets.values
+          .get({
+            spreadsheetId: SPREADSHEET_ID,
+            range: SheetSelected,
+          })
+          .then(
+            function (response) {
+              GLOBAL_DATA = response.result.values;
+            },
+            function (response) {
+              alert("Error: " + response.result.error.message);
+            }
+          );
+      }
+
+      function redirecthome() {
+        window.location = "http://localhost:8000";
+      }
+
+      function cust(event) {
+        event.preventDefault();
+        var name = document.getElementById("customername").value;
+        var postcode = document.getElementById("customerpostcode").value;
+        var email = document.getElementById("customeremail").value;
+        var phone = document.getElementById("customerphone").value;
+        var dog = document.getElementById("customerdog").value;
+        var breed = document.getElementById("customerbreed").value;
+        var ref = "";
+        var tc = document.getElementById("customertc").value;
+        var paid = document.getElementById("customerpaid").value;
+        gapi.client.sheets.spreadsheets.values
+          .get({
+            spreadsheetId: SPREADSHEET_ID,
+            range: SheetSelected,
+          })
+          .then(
+            function (response) {
+              var res = response.result.values;
+              var new_customer_array = [];
+              var time = "";
+              if (SheetSelected == "Sunday 9.30AM") {
+                time = "9:30AM";
+              } else if (SheetSelected == "Sunday 10.30AM") {
+                time = "10:30AM";
+              } else {
+                time = "06:30PM";
+              }
+              new_customer_array[0] = time;
+              new_customer_array[1] = name;
+              new_customer_array[2] = postcode;
+              new_customer_array[3] = email;
+              new_customer_array[4] = phone;
+              new_customer_array[5] = dog;
+              new_customer_array[6] = breed;
+              new_customer_array[7] = ref;
+              new_customer_array[8] = tc;
+              new_customer_array[9] = paid;
+              res[res.length] = new_customer_array;
+              addNewCustomer(res);
+            },
+            function (response) {
+              alert("Error: " + response.result.error.message);
+            }
+          );
+      }
+
+      /**
+       *  Initializes the API client library and sets up sign-in state
+       *  listeners.
+       */
+      function initClient() {
+        gapi.client
+          .init({
+            apiKey: API_KEY,
+            clientId: CLIENT_ID,
+            discoveryDocs: DISCOVERY_DOCS,
+            scope: SCOPES,
+          })
+          .then(
+            function () {
+              // Listen for sign-in state changes.
+              gapi.auth2
+                .getAuthInstance()
+                .isSignedIn.listen(updateSigninStatus);
+
+              // Handle the initial sign-in state.
+              updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+              authorizeButton.onclick = handleAuthClick;
+              signoutButton.onclick = handleSignoutClick;
+            },
+            function (error) {
+              appendPre(JSON.stringify(error, null, 2));
+            }
+          );
+      }
+
+      /**
+       *  Called when the signed in status changes, to update the UI
+       *  appropriately. After a sign-in, the API is called.
+       */
+      function updateSigninStatus(isSignedIn) {
+        if (isSignedIn) {
+          authorizeButton.style.display = "none";
+          signoutButton.style.display = "block";
+          dayRow.style.display = "flex";
+        } else {
+          authorizeButton.style.display = "block";
+          signoutButton.style.display = "none";
+        }
+      }
+
+      /**
+       *  Sign in the user upon button click.
+       */
+      function handleAuthClick(event) {
+        gapi.auth2.getAuthInstance().signIn();
+      }
+
+      /**
+       *  Sign out the user upon button click.
+       */
+      function handleSignoutClick(event) {
+        gapi.auth2.getAuthInstance().signOut();
+      }
+
+      /**
+       * Append a pre element to the body containing the given message
+       * as its text node. Used to display the results of the API call.
+       *
+       * @param {string} message Text to be placed in pre element.
+       */
+      function appendPre(message) {
+        var pre = document.getElementById("content");
+        var textContent = document.createTextNode(message + "\n");
+        pre.appendChild(textContent);
+      }
+    </script>
+
+    <script
+      async
+      defer
+      src="https://apis.google.com/js/api.js"
+      onload="this.onload=function(){};handleClientLoad()"
+      onreadystatechange="if (this.readyState === 'complete') this.onload()"
+    ></script>
+  </body>
+</html>

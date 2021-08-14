@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/fontawesome.min.css">
+        <link rel="stylesheet" type="text/css" href="css/style.css"> 
+        <link rel="stylesheet" type="text/css" href="css/responive.css">
+
+        <title>index</title>
+    </head>
+
+    <body>
+        <div class="wrapper">
+            <div class="main-sec">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-12 "> 
+                            <div class="top-box">
+                                <div class="text-box">
+                                    <h2>Hill Heads Dog Club</h2>
+                                    <a class="menu-btn" href="#"><img src="images/menu.svg" alt="" /></a>
+                                </div> 
+                            </div> 
+                            <h1 id="marker" style="text-align: center; padding-bottom:20px; font-size: 20px">Mark Attendance</h1>
+                            <form >
+                                <div class="row" id="day" style="display: none">
+                                    <div class="col-4">
+                                        <div class="form-group">
+                                            <label class=" form-label">Select day</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-8">
+                                        <div class="form-group">
+                                            <select class="form-select" aria-label="Select Day" id="day-select" onchange="showTiming(this.value)">
+                                                <option value="" selected disabled>Drop Down</option>
+                                                <option value="Sunday">Sunday</option>
+                                                <option value="Tuesday">Tuesday</option>
+                                                <option value="Wednesday">Wednesday</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" id="time" style="display:none;">
+                                    <div class="col-4">
+                                        <div class="form-group">
+                                            <label class=" form-label">Select Time</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-8">
+                                        <div class="form-group">
+                                            <select class="form-select" aria-label="Select Day" id="time-select" onchange="showDates(this.value)">
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" id="week" style="display:none">
+                                    <div class="col-4">
+                                        <div class="form-group">
+                                            <label class=" form-label">Select Week</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-8">
+                                        <div class="form-group">
+                                            <select class="form-select" aria-label="Select Day" id="week-select" onchange="getDogData(this.value, this.options[this.selectedIndex].text)">
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div> 
+                                <ul>
+                                    <li><button id="add-customer" class="btn" onclick="showForm(event)">Add Customer</button></li>
+                                </ul> 
+                                
+                                    
+                            </form> 
+                            
+                            <h3
+                            id="final-table-header"
+                            class="text-center"
+                            style="display: none"
+                          ></h3>
+                            <!-- cards start -->
+                            <div id="table-div" style="display: none;">
+                            <div id="attendance-card" class="row">
+                            </div>
+                            <br>
+                            <br>
+                            <br>
+                            <form>
+                            <div class="row" style="padding-bottom:30px;">
+                                <div class="col-12">
+                                    <div class="form-group mb-0">
+                                        <ul>
+                                            <!-- <li><button id="add-customer" class="btn" style="display: none" onclick="showForm(event)">Add Customer</button></li> -->
+                                            <!-- <li><button type="submit" class="btn " onclick="markAttendance(event)">Mark attendance</button></li> -->
+                                        </ul> 
+                                    </div>
+                                </div> 
+                            </div>
+                        </form>
+                           </div>
+                            <!-- cards end -->
+                        </div>
+                        <div class="add-custom" id="customerform" style="display: none;">
+                            <h3>Add a Customer</h3>
+                            <form onsubmit="cust(event)">
+                                <div class="row">
+                                    <div class="col-12">
+
+                                        <label for="customername" class="form-label mt-0">Name</label>
+
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <input type="text" id="customername" class="form-control" placeholder="" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+
+                                        <label for="customerpostcode" class="form-label mt-0">PostCode</label>
+
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <input type="text" id="customerpostcode" class="form-control" placeholder="" required />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+
+                                        <label id="customeremail" class=" form-label mt-0">Email</label>
+
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <input type="text" id="customeremail" class="form-control" placeholder="" required/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+
+                                        <label for="customerphone" class=" form-label mt-0">Phone</label>
+
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <input type="text" id="customerphone" class="form-control" placeholder="" required />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+
+                                        <label for="customerdog" class=" form-label mt-0">Dog Name</label>
+
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <input type="text" id="customerdog" class="form-control" placeholder="" required />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+
+                                        <label for="customerbreed" class=" form-label mt-0">Breed</label>
+
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <input type="text" id="customerbreed" class="form-control" placeholder="" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <label class=" form-label mt-0">T&C</label>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <select class="form-select" aria-label="T&C" id="customertc">
+                                                <option value="No">No</option>
+                                                <option value="Yes">Yes</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12"> 
+                                        <label for="customerpaid" class=" form-label">Paid</label> 
+                                    </div>
+                                    <div class="col-12">
+                                        <select class="form-select" aria-label="T&C" id="customerpaid">
+                                            <option value="No">No</option>
+                                            <option value="Yes">Yes</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="form-group mt-4 mb-4">
+                                            <ul>
+                                                <li><button type="submit" id="goback" class="btn btn-warning" onclick="redirecthome()">Back</button></li>
+                                                <li><button type="submit" class="btn btn-primary">Add</button></li>
+                                            </ul> 
+                                        </div>
+                                    </div> 
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="side-menu">
+            <ul>
+                <li><button type="button" class="btn" aria-label="page" onclick="redirecthome()">Home</button></li>
+                <li id="authorize_button" style="display: none"><button type="button"  class="btn btn btn-warning "  >Authorize</button></li>
+                <li id="signout_button" style="display: none"><button type="button" class="btn btn-danger" >Sign Out</button></li>
+                
+            </ul> 
+        </div>
+
+
+        <script src="js/jquery-3.4.1.slim.min.js"></script>
+        <script src="js/jquery.min.js"></script>
+        <script src="js/popper.min.js"></script>
+        <script src="js/bootstrap.min.js"></script> 
+        <script src="js/custom.js"></script>
+        <script
+        async
+        defer
+        src="https://apis.google.com/js/api.js"
+        onload="this.onload=function(){};handleClientLoad()"
+        onreadystatechange="if (this.readyState === 'complete') this.onload()"
+      ></script>
+
+    </body>
+
+</html>
